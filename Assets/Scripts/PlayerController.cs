@@ -12,11 +12,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        LockRotation();
     }
 
     private void FixedUpdate()
-    {
-        LockRotation();
+    {     
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
         if (movement != Vector3.zero) 
