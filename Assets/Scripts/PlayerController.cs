@@ -1,18 +1,23 @@
 using UnityEngine;
+using TMPro;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 5.0f;
+    [SerializeField] private TextMeshProUGUI countText;
+    [SerializeField] private GameObject winTextObject;
 
     private Rigidbody rb;
     private float movementX;
     private float movementY;
+    private int count = 0;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         LockRotation();
+        SetCountText();
     }
 
     private void FixedUpdate()
@@ -27,6 +32,16 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = movement * speed;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Pick Up"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 1;
+            SetCountText();
+        }
+    }
+
     private void LockRotation()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;  
@@ -38,5 +53,15 @@ public class PlayerController : MonoBehaviour
 
         movementX = movementVector.x;
         movementY = movementVector.y;
+    }
+
+    private void SetCountText()
+    {
+        countText.text = "Count: " + count.ToString();
+
+        if (count >= 5)
+        {
+            winTextObject.SetActive(true);
+        }
     }
 }
